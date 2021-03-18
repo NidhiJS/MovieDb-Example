@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<title>MOVIE DB</title>
+<link rel="icon" href="icons8-Doctors Bag-40.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="a.css">
+<style media="screen">
+.center {
+height: 200px;
+position: absolute;
+border: 3px;
+}
+</style>
+<script>
+function searchbar(){
+document.getElementById("search").hidden;
+  var data = "{}";
+
+  var xhr = new XMLHttpRequest();
+  var key = document.getElementById("search").value;
+
+  console.log(key);
+
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === this.DONE) {
+      document.getElementById("main").style.display = "none";
+      var myArr = JSON.parse(this.responseText);
+      var div = document.getElementById('main');
+      while(div.firstChild){
+        div.removeChild(div.firstChild);
+      }
+      for(i in myArr.results){
+
+        document.getElementById("main").style.display = "block";
+        console.log(myArr.results[i].title);
+         var p = document.createElement("P");
+         p.innerHTML = "Title:<br>"+myArr.results[i].title;
+
+        var overview = document.createElement("P");
+        overview.innerHTML = "Overview:<br>"+myArr.results[i].overview;
+        overview.setAttribute("height", "450px");
+        overview.setAttribute("width", "250px");
+
+        var popularity = document.createElement("P");
+        popularity.innerHTML = "Rating: "+myArr.results[i].vote_average;
+
+        var elem = document.createElement("img");
+        elem.setAttribute("src","https://image.tmdb.org/t/p/w500/"+myArr.results[i].poster_path);
+        elem.setAttribute("height", "150px");
+        elem.setAttribute("width", "150px");
+        elem.setAttribute("alt", "Flower");
+
+        var div = document.createElement("div");
+        div.classList.add("content");
+
+
+        div.appendChild(elem);
+        div.appendChild(p);
+        div.appendChild(overview);
+        div.appendChild(popularity);
+        var div2 = document.createElement("div");
+        div2.classList.add("column");
+        div2.appendChild(div);
+        document.getElementById("main").appendChild(div2);
+
+    }
+    }
+  });
+
+  xhr.open("GET", "https://api.themoviedb.org/3/search/multi?region=india&include_adult=false&page=1&query="+window.encodeURIComponent(key)+"&language=en-US&api_key=e37c1d8357d6da85c91a64744304fecd",true);
+
+  xhr.send(data);
+
+}
+
+</script>
+<script src="pr.js"></script>
+</head>
+
+<body>
+  <nav id="nav">
+	<ul>
+   <li><a href="#logo" class="logo">MOVIE</a></li>
+   <li><a href="" class="active">HOME</a></li>
+   <li><a href="mov.html">Recently Added Movies</a> </li>
+   <li><a href="tv.html">Recently Added TV</a> </li>
+   <li><a href="searchbar.html">search</a> </li>
+   </ul>
+</nav>
+
+<div class="main" id="main">
+  <div class="row"  >
+    <div class="column">
+        <div class="content" >
+        </div>
+    </div>
+  </div>
+</div>
+<div class="center" style="top:100px;">
+  <form onclick="searchbar()">
+    <input type="text" name="search" value="" id="search">
+  </form>
+</div>
+
+
+</body>
+</html>
